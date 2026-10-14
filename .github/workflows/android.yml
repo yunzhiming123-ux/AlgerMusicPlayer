@@ -67,6 +67,9 @@ jobs:
           npx cap add android
           node scripts/android-enable-cleartext.js
           npx cap sync android
+          # vite-plugin-compression 产出的 .gz 副本会被 cap sync 拷进资源目录，
+          # AGP 8 会把 x.gz 与 x 当成同一路径导致 mergeDebugAssets 报重复资源
+          node scripts/android-strip-gz.js
 
       # 失败时把 Gradle 错误摘录成 annotation（public 仓库可匿名通过 API 读取，便于定位）
       - name: Build APK
@@ -83,7 +86,7 @@ jobs:
               awk '/What went wrong:/{f=1} f{print} /^BUILD FAILED/{if(f) exit}' "$RUNNER_TEMP/gradle.log" | head -n 10
             else
               tail -n 10 "$RUNNER_TEMP/gradle.log"
-            fi | while IFS= read -r line; do echo "::error::gradle: ${line:0:180}"; done
+            fi | while IFS= read -r line; do echo "::error::gradle: ${line:0:400}"; done
             exit "$code"
           fi
 

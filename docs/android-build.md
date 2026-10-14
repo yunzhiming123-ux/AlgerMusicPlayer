@@ -63,6 +63,7 @@ npm run build
 npx cap add android
 node scripts/android-enable-cleartext.js   # 允许 http 接口
 npx cap sync android
+node scripts/android-strip-gz.js           # 删除 .gz 压缩副本，否则打包报重复资源
 
 # 5. 打包
 cd android
@@ -75,6 +76,10 @@ cd android
 
 **Q: 构建报 `VITE_API 未配置或不以 http 开头`？**
 A: fork 仓库里没设置名为 `VITE_API` 的 Secret，见上文第 3 步。
+
+**Q: 打包报 `Execution failed for task ':app:mergeDebugAssets'`（重复资源）？**
+A: 网页构建产出的 `.gz` 压缩副本被同步进了安卓资源目录。执行
+`node scripts/android-strip-gz.js` 后重新打包即可（云打包工作流已自动处理）。
 
 **Q: APK 装上后所有接口都失败，但浏览器里同一地址一切正常？**
 A: 多半是接口地址在手机上不可达（例如填了 `127.0.0.1`——那指的是手机自己），
