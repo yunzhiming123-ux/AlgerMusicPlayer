@@ -11,15 +11,18 @@ Android 原生工程（`android/`）不入库，由 `npx cap add android` 按需
 
 2. **推送代码**（本仓库的修改）到你 fork 的 `main` 分支。
 
-3. **配置接口地址 Secret**
-   进入你 fork 的仓库 → `Settings` → `Secrets and variables` → `Actions` → `New repository secret`：
+3. **（可选）配置接口地址 Secret**
+   不配置也能打包——工作流会自动使用官方接口 `http://mc.alger.fun/api`
+   （与官方 APK 内置值一致）。只有想换接口时才需要：
+
+   fork 仓库 → `Settings` → `Secrets and variables` → `Actions` → `New repository secret`：
 
    | Name | Value |
    | --- | --- |
-   | `VITE_API` | 手机能访问到的接口地址，如 `http://mc.alger.fun/api` |
+   | `VITE_API` | 接口地址，如 `http://mc.alger.fun/api` 或 `http://192.168.1.5:30488` |
 
-   > `http://mc.alger.fun/api` 是官方 APK（v5.1.0）内置的接口地址，可直接使用。
-   > 也可以自建 `netease-cloud-music-api-alger` 后填局域网地址（如 `http://192.168.1.5:30488`，仅同一 Wi-Fi 可用）。
+   > 注意 `Settings` 在**你自己 fork 的仓库页面**里（你 fork 后就是它的作者），
+   > 用与该仓库同名的账号登录才能看到；进不去通常是登录的账号不对或仓库名不一致。
 
    说明：
    - 这是网页版/移动端唯一的接口来源（桌面端 Electron 用本地接口，不走这个值）。

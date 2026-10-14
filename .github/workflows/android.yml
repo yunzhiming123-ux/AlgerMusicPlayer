@@ -23,15 +23,26 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      # 接口地址通过仓库 Secrets 注入（Settings → Secrets and variables → Actions → New repository secret）
+      # 接口地址：优先读取仓库 Secret VITE_API；未配置时回退到官方 APK 内置的接口，
+      # 因此不设置 Secret 也能直接打包（需要换接口时再去 Settings → Secrets 配置）
       - name: Create env file
+        env:
+          SECRET_VITE_API: ${{ secrets.VITE_API }}
         run: |
-          echo "VITE_API=${{ secrets.VITE_API }}" > .env.production.local
-          cat .env.production.local
-          if ! grep -q "VITE_API=http" .env.production.local; then
-            echo "::error::仓库 Secret VITE_API 未配置或不以 http 开头，构建终止"
-            exit 1
+          API_URL="${SECRET_VITE_API}"
+          if [ -z "${API_URL}" ]; then
+            API_URL="http://mc.alger.fun/api"
+            echo "::notice::未配置 Secret VITE_API，使用默认官方接口 ${API_URL}"
           fi
+          echo "VITE_API=${API_URL}" > .env.production.local
+          cat .env.production.local
+          case "${API_URL}" in
+            http://*|https://*) ;;
+            *)
+              echo "::error::VITE_API 必须以 http:// 或 https:// 开头：${API_URL}"
+              exit 1
+              ;;
+          esac
 
       # 跳过 electron 下载等安装脚本，网页构建不需要
       - name: Install dependencies
