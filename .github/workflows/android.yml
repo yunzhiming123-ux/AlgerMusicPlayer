@@ -21,7 +21,9 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'
+          # Capacitor 7 的 Android 工程 (capacitor-android) 要求 Java 21，
+          # 用 17 会失败：error: invalid source release: 21
+          java-version: '21'
 
       # 接口地址：优先读取仓库 Secret VITE_API；未配置时回退到官方 APK 内置的接口，
       # 因此不设置 Secret 也能直接打包（需要换接口时再去 Settings → Secrets 配置）

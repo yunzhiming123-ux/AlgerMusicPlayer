@@ -43,7 +43,7 @@ Android 原生工程（`android/`）不入库，由 `npx cap add android` 按需
 前置条件：
 
 - Node.js 18+
-- JDK 17
+- JDK 21（Capacitor 7 的 Android 工程要求；JDK 17 会报 `invalid source release: 21`）
 - Android SDK（安装 [Android Studio](https://developer.android.com/studio) 最省事，
   或单独装 commandline-tools + platform + build-tools）
 
