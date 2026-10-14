@@ -56,7 +56,11 @@ export default {
     qrScannedShort: '스캔됨',
     qrScannedInfo: 'QR코드가 스캔되었습니다. 휴대폰에서 로그인을 확인하세요',
     qrConfirmed: '로그인 성공, 리다이렉트 중...',
-    qrGenerating: 'QR코드를 생성 중...'
+    qrGenerating: 'QR코드를 생성 중...',
+    qrKeyMissing: 'API가 QR 키를 반환하지 않았습니다. 응답 구조가 변경되었을 수 있습니다',
+    qrImgMissing: 'API가 QR 이미지를 반환하지 않았습니다. 응답 구조가 변경되었을 수 있습니다',
+    qrImgError: 'QR 이미지를 불러오지 못했습니다',
+    getUserFailed: '사용자 정보를 가져오지 못했습니다. 다시 시도해 주세요'
   },
   qrTitle: '넷이즈 클라우드 뮤직 QR코드 로그인',
   uidWarning:

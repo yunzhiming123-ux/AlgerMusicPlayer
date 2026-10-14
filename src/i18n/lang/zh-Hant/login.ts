@@ -55,7 +55,11 @@ export default {
     qrScannedShort: '已掃碼',
     qrScannedInfo: '已扫码，请在手机上确认登录',
     qrConfirmed: '登入成功，正在跳轉...',
-    qrGenerating: '正在生成二維碼...'
+    qrGenerating: '正在生成二維碼...',
+    qrKeyMissing: '介面未回傳二維碼key，回傳結構可能已變更',
+    qrImgMissing: '介面未回傳二維碼圖片，回傳結構可能已變更',
+    qrImgError: '二維碼圖片載入失敗',
+    getUserFailed: '取得使用者資訊失敗，請重試'
   },
   qrTitle: '掃碼登入網易雲音樂',
   uidWarning: '注意：UID登入僅用於查看使用者公開資訊，無法訪問需要登入權限的功能'

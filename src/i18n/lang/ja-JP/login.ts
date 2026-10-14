@@ -57,7 +57,11 @@ export default {
     qrScannedShort: 'スキャン済み',
     qrScannedInfo: 'QRコードがスキャンされました。スマートフォンでログインを確認してください',
     qrConfirmed: 'ログイン成功、リダイレクト中...',
-    qrGenerating: 'QRコードを生成中...'
+    qrGenerating: 'QRコードを生成中...',
+    qrKeyMissing: 'APIからQRキーが返されませんでした。レスポンス構造が変更された可能性があります',
+    qrImgMissing: 'APIからQR画像が返されませんでした。レスポンス構造が変更された可能性があります',
+    qrImgError: 'QR画像の読み込みに失敗しました',
+    getUserFailed: 'ユーザー情報の取得に失敗しました。もう一度お試しください'
   },
   qrTitle: 'NetEase Cloud Music QRコードログイン',
   uidWarning:

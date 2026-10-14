@@ -56,7 +56,11 @@ export default {
     qrScannedShort: 'Scanned',
     qrScannedInfo: 'QR code scanned, please confirm login on your phone',
     qrConfirmed: 'Login successful, redirecting...',
-    qrGenerating: 'Generating QR code...'
+    qrGenerating: 'Generating QR code...',
+    qrKeyMissing: 'API did not return QR key, response structure may have changed',
+    qrImgMissing: 'API did not return QR image, response structure may have changed',
+    qrImgError: 'Failed to load QR image',
+    getUserFailed: 'Failed to get user info, please try again'
   },
   qrTitle: 'NetEase Cloud Music QR Code Login',
   uidWarning:

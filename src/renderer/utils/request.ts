@@ -22,6 +22,14 @@ const request = axios.create({
   withCredentials: true
 });
 
+// 非 Electron 环境（Web / 移动端 / Android WebView）依赖构建时注入的 VITE_API，
+// 缺失时所有接口都会失败，这里给出明确告警便于定位
+if (!window.electron && !import.meta.env.VITE_API) {
+  console.error(
+    '[request] VITE_API 未配置，接口请求将全部失败（构建时请配置 .env.production.local 中的 VITE_API）'
+  );
+}
+
 // 最大重试次数
 const MAX_RETRIES = 1;
 // 重试延迟（毫秒）
@@ -73,7 +81,8 @@ request.interceptors.request.use(
   }
 );
 
-const NO_RETRY_URLS = ['暂时没有'];
+// 二维码相关接口不自动重试：接口本身 15s 超时，再重试会让登录页长时间停留在"加载中"
+const NO_RETRY_URLS = ['/login/qr/key', '/login/qr/create', '/login/qr/check'];
 
 // 响应拦截器
 request.interceptors.response.use(

@@ -55,7 +55,11 @@ export default {
     qrScannedShort: '已扫码',
     qrScannedInfo: '已扫码，请在手机上确认登录',
     qrConfirmed: '登录成功，正在跳转...',
-    qrGenerating: '正在生成二维码...'
+    qrGenerating: '正在生成二维码...',
+    qrKeyMissing: '接口未返回二维码key，返回结构可能已变更',
+    qrImgMissing: '接口未返回二维码图片，返回结构可能已变更',
+    qrImgError: '二维码图片加载失败',
+    getUserFailed: '获取用户信息失败，请重试'
   },
   qrTitle: '扫码登录',
   uidWarning: '注意：UID登录仅用于查看用户公开信息，无法访问需要登录权限的功能'
