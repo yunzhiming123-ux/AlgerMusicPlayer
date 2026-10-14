@@ -1,0 +1,61 @@
+name: Build Android APK
+
+on:
+  workflow_dispatch: # 手动触发
+  push:
+    branches:
+      - main
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      # 接口地址通过仓库 Secrets 注入（Settings → Secrets and variables → Actions → New repository secret）
+      - name: Create env file
+        run: |
+          echo "VITE_API=${{ secrets.VITE_API }}" > .env.production.local
+          cat .env.production.local
+          if ! grep -q "VITE_API=http" .env.production.local; then
+            echo "::error::仓库 Secret VITE_API 未配置或不以 http 开头，构建终止"
+            exit 1
+          fi
+
+      # 跳过 electron 下载等安装脚本，网页构建不需要
+      - name: Install dependencies
+        run: npm install --ignore-scripts --no-audit --no-fund
+
+      - name: Build web
+        run: npm run build
+
+      - name: Prepare Android platform
+        run: |
+          rm -rf android
+          npx cap add android
+          node scripts/android-enable-cleartext.js
+          npx cap sync android
+
+      - name: Build APK
+        run: |
+          chmod +x android/gradlew
+          cd android
+          ./gradlew assembleDebug --no-daemon
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: AlgerMusicPlayer-debug-apk
+          path: android/app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error

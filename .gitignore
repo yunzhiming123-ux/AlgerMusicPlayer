@@ -46,6 +46,13 @@ AGENTS.md
 .auto-imports.d.ts
 .components.d.ts
 
+# Capacitor 生成的 Android 工程（npx cap add android 生成，不纳入版本控制）
+android/*
+!android/.gitignore
+
+# Capacitor
+ capacitor.config.ts.bak
+
 # TypeScript 增量编译缓存
 *.tsbuildinfo
 
