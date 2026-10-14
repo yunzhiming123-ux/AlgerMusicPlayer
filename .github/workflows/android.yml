@@ -51,6 +51,14 @@ jobs:
       - name: Build web
         run: npm run build
 
+      # 显式确保编译所需的 SDK 组件（部分 runner 镜像缺少 platforms/build-tools 会直接导致 assembleDebug 失败）
+      - name: Ensure Android SDK packages
+        run: |
+          SDKM="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          yes | "$SDKM" --licenses > /dev/null 2>&1 || true
+          "$SDKM" "platforms;android-35" "build-tools;35.0.0" > /dev/null 2>&1 || true
+          "$SDKM" --list_installed | grep -E "platforms;android-35|build-tools;35" || echo "sdk list unavailable"
+
       - name: Prepare Android platform
         run: |
           rm -rf android
@@ -58,11 +66,24 @@ jobs:
           node scripts/android-enable-cleartext.js
           npx cap sync android
 
+      # 失败时把 Gradle 错误摘录成 annotation（public 仓库可匿名通过 API 读取，便于定位）
       - name: Build APK
         run: |
           chmod +x android/gradlew
           cd android
-          ./gradlew assembleDebug --no-daemon
+          ./gradlew assembleDebug --no-daemon 2>&1 | tee "$RUNNER_TEMP/gradle.log" || true
+          code=${PIPESTATUS[0]}
+          if [ "$code" != "0" ]; then
+            echo "::group::gradle - What went wrong"
+            awk '/What went wrong:/{f=1} f{print} /^BUILD FAILED/{if(f) exit}' "$RUNNER_TEMP/gradle.log" | head -n 40 || true
+            echo "::endgroup::"
+            if grep -q "What went wrong" "$RUNNER_TEMP/gradle.log"; then
+              awk '/What went wrong:/{f=1} f{print} /^BUILD FAILED/{if(f) exit}' "$RUNNER_TEMP/gradle.log" | head -n 10
+            else
+              tail -n 10 "$RUNNER_TEMP/gradle.log"
+            fi | while IFS= read -r line; do echo "::error::gradle: ${line:0:180}"; done
+            exit "$code"
+          fi
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
