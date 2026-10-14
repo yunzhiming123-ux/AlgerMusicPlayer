@@ -16,7 +16,10 @@ Android 原生工程（`android/`）不入库，由 `npx cap add android` 按需
 
    | Name | Value |
    | --- | --- |
-   | `VITE_API` | 手机能访问到的接口地址，如 `https://你的接口域名` 或 `http://192.168.1.5:30488` |
+   | `VITE_API` | 手机能访问到的接口地址，如 `http://mc.alger.fun/api` |
+
+   > `http://mc.alger.fun/api` 是官方 APK（v5.1.0）内置的接口地址，可直接使用。
+   > 也可以自建 `netease-cloud-music-api-alger` 后填局域网地址（如 `http://192.168.1.5:30488`，仅同一 Wi-Fi 可用）。
 
    说明：
    - 这是网页版/移动端唯一的接口来源（桌面端 Electron 用本地接口，不走这个值）。
